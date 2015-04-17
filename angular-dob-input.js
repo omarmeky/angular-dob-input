@@ -167,7 +167,11 @@ angular.module('angular-dob-input', [])
             ctrl.$parsers.push(function(value) {
                 // parse DOB
                 if (!valid(value)) {
+                    ctrl.$setValidity('dob', false);
                     return undefined;
+                }
+                else {
+                    ctrl.$setValidity('dob', true);
                 }
                 if(value != null) {
                     var obj = parseDOB(value);
@@ -180,7 +184,11 @@ angular.module('angular-dob-input', [])
             ctrl.$formatters.push(function(value) {
                 // get formatted DOB
                 if (!valid(value)) {
+                    ctrl.$setValidity('dob', false);
                     return undefined;
+                }
+                else {
+                    ctrl.$setValidity('dob', true);
                 }
                 if(value != null) {
                     var obj = parseDOB(value);
@@ -249,12 +257,6 @@ angular.module('angular-dob-input', [])
 
                 return dob < currentTime;
             };
-
-            scope.$watch(attr.ngModel, function(newVal, oldVal) {
-                if(newVal != oldVal) {
-                    ctrl.$setValidity('dob', valid(newVal));
-                }
-            });
         }
     }
 }]);
