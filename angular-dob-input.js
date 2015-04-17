@@ -142,14 +142,14 @@ angular.module('angular-dob-input', [])
 
             var parseDOB = function(value){
                 var month, prefix, year, _ref;
-                value = value || ''
+                value = value || '';
 
                 value = value.replace(/\s/g, '');
                 _ref = value.split('/', 3), month = _ref[0], day = _ref[1], year = _ref[2];
 
                 if ((year != null ? year.length : void 0) === 2 && /^\d+$/.test(year)) {
                     prefix = (new Date).getFullYear();
-                    prefix = prefix.toString().slice(0, 2);
+                    prefix = +year > +prefix.toString().slice(2, 4) ? +prefix.toString().slice(0, 2) - 1 : prefix.toString().slice(0, 2);
                     year = prefix + year;
                 }
 
@@ -166,6 +166,9 @@ angular.module('angular-dob-input', [])
 
             ctrl.$parsers.push(function(value) {
                 // parse DOB
+                if (!valid(value)) {
+                    return undefined;
+                }
                 if(value != null) {
                     var obj = parseDOB(value);
                     var dob = new Date(obj.year, obj.month-1, obj.day);
@@ -176,12 +179,81 @@ angular.module('angular-dob-input', [])
 
             ctrl.$formatters.push(function(value) {
                 // get formatted DOB
+                if (!valid(value)) {
+                    return undefined;
+                }
                 if(value != null) {
                     var obj = parseDOB(value);
                     var dob = new Date(obj.year, obj.month-1, obj.day);
+                    if (isNaN(dob.getTime())) {
+                        return null;
+                    }
                     return $filter('date')(dob, 'MM / dd / yyyy');
                 }
                 return null;
+            });
+
+            var valid = function(val) {
+                // valid if empty - let ng-required handle empty
+                if(val == null || val.length == 0) return true;
+
+                var obj = parseDOB(val);
+
+                var month = obj.month;
+                var day = obj.day;
+                var year = obj.year;
+
+                var currentTime, expiry, prefix;
+
+                if (!(month && day && year)) {
+                    return false;
+                }
+
+                if (!/^\d+$/.test(month)) {
+                    return false;
+                }
+
+                if (!/^\d+$/.test(day)) {
+                    return false;
+                }
+
+                if (!/^\d+$/.test(year)) {
+                    return false;
+                }
+
+                if (!(parseInt(month, 10) <= 12)) {
+                    return false;
+                }
+
+                if (!(parseInt(day, 10) <= 31)) {
+                    return false;
+                }
+
+                if (year.length === 2) {
+                    var prefix = (new Date).getFullYear();
+                    prefix = +year > +prefix.toString().slice(2, 4) ? +prefix.toString().slice(0, 2) - 1 : prefix.toString().slice(0, 2);
+                    year = prefix + year;
+                }
+
+                if (year < 1900) {
+                    return false;
+                }
+
+                var dob = new Date(year, month - 1, day);
+
+                if (!dob || dob.getDate() != day || dob.getFullYear() != year || dob.getMonth() != month - 1) {
+                    return false;
+                }
+
+                var currentTime = new Date;
+
+                return dob < currentTime;
+            };
+
+            scope.$watch(attr.ngModel, function(newVal, oldVal) {
+                if(newVal != oldVal) {
+                    ctrl.$setValidity('dob', valid(newVal));
+                }
             });
         }
     }
