@@ -61,7 +61,7 @@ angular.module('angular-dob-input', [])
                     e.preventDefault();
                     return $target.val("0" + val + " / ");
                 }
-                else if (/^\d\d \/ \d$/.test(val) && (val !== '0' && val !== '1' && val !== '2' && val !== '3')) {
+                else if (/^\d\d \/ \d$/.test(val) && (digit !== '0' && digit !== '1' && digit !== '2' && digit !== '3')) {
                     e.preventDefault();
                     return $target.val($target.val() + '0' + digit + ' / ');
                 }
@@ -87,7 +87,7 @@ angular.module('angular-dob-input', [])
                 if (/^\d$/.test(val) && val !== '0') {
                     return $target.val("0" + val + " / ");
                 }
-                else if (/^\d\d \/ \d$/.test(val) && val !== '0') {
+                else if (/^\d\d \/ \d$/.test(val) && val.substring(val.length - 1) !== '0') {
                     return $target.val(val.substring(0, val.length - 1) + '0' + val.substring(val.length - 1) + " / ");
                 }
             });
