@@ -1,0 +1,25 @@
+{
+  "name": "angular-dob-input",
+  "version": "0.0.0",
+  "homepage": "https://github.com/omarmeky/angular-dob-input",
+  "authors": [
+    "Omar Meky <meky.omar@gmail.com>"
+  ],
+  "description": "Directive for validating and auto-formatting text inputs for date of births.",
+  "main": "angular-dob-input.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "angularjs",
+    "directive",
+    "format",
+    "validate",
+    "text",
+    "input",
+    "date",
+    "birth",
+    "dob"
+  ],
+  "license": "MIT"
+}
