@@ -65,6 +65,10 @@ angular.module('angular-dob-input', [])
                     e.preventDefault();
                     return $target.val($target.val() + '0' + digit + ' / ');
                 }
+                else if (/^\d\d\d$/.test(val) && (digit !== '0' && digit !== '1' && digit !== '2' && digit !== '3')) {
+                    e.preventDefault();
+                    return $target.val($target.val() + ' / 0' + digit + ' / ');
+                }
                 else if (/^\d\d$/.test(val) || /^\d\d \/ \d\d$/.test(val)) {
                     e.preventDefault();
                     return $target.val("" + val + " / ");
